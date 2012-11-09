@@ -1,0 +1,43 @@
+// user
+{
+	"id":54321,
+	"username":"foo",
+	"password":"bar",
+	"following":
+		[
+			{"user":11111},
+			{"user":22222},
+			{"user":33333}
+		],
+	"followers":
+		[
+			{"user":44444},
+			{"user":55555}
+		]
+}
+
+// idea
+{
+	"id":12345,
+	"title":"foo",
+	"description":"bar",
+	"created":"00/00/00",
+	"owner":123456,
+	"followers":
+		[
+			{"user":44444},
+			{"user":55555}
+		],
+	"bids":
+		[
+			{"user":44444,"amount":50000},
+			{"user":55555,"amount":30000}
+		]
+}
+
+// bid
+{
+	"idea":12345,
+	"user":54321,
+	"amount":50000
+}

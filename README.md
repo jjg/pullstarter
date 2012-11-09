@@ -13,4 +13,16 @@ An inverted take on Kickstarter
 * a single bid
 * a template for adding/editing a bid
 * error details
-* 
+
+###Objects###
+
+####The idea object####
+‘’’
+// sample idea object
+{
+	“idea”:
+	{
+		“href” : URI,
+		“title” : STRING,
+		“description” : STRING,
+		
