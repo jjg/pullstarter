@@ -1,0 +1,3 @@
+function newIdea(){
+	alert("adding!");
+}

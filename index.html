@@ -2,16 +2,48 @@
 <head>
   <meta charset="utf-8">
 
-  <title>My Parse App</title>
+  <title>Pullstarter</title>
   <meta name="description" content="My Parse App">
   <meta name="viewport" content="width=device-width">
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/styles.css">
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
   <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.1.8.min.js"></script>
+  <script type="text/javascript" src="pullstarter.js"></script>
+  <script>
+    Parse.initialize("sGF4JuqzcDyl4TDKKt3U7d3OdPNZG0FZ3TqTuJTr", "OXrMKIkKStgssmijppy8fbfutIvEvUaUOn0dHIwI");
+
+    function newIdea(){
+
+      //alert("title: " + $("#ideaTitle").val() + " description:" + $("#ideaDescription").val());
+
+      
+      var Idea = Parse.Object.extend("Idea");
+      var idea = new Idea();
+        idea.save({title:$("#ideaTitle").val(), description:$("#ideaDescription").val()}, {
+          
+        success: function(object) {
+          alert("Idea Added! Title: " + $("#ideaTitle").val() + " Description: " + $("#ideaDescription").val());
+          //$(".success").show();
+        },
+        error: function(model, error) {
+          alert("adding idea failed (darn!)");
+          //$(".error").show();
+        }
+        
+      });
+      
+    }
+  </script>
 </head>
 
 <body>
+
+  <div id="idea">
+    Title: <input id="ideaTitle" type="text"><br>
+    Description:<br><textarea id="ideaDescription"></textarea><br>
+    <button onclick="newIdea()">add</button>
+  </div>
   
   <div id="main">
     <h1>You're ready to use Parse!</h1>
@@ -39,6 +71,7 @@
   </div>
 
   <script type="text/javascript">
+    /*
     Parse.initialize("sGF4JuqzcDyl4TDKKt3U7d3OdPNZG0FZ3TqTuJTr", "OXrMKIkKStgssmijppy8fbfutIvEvUaUOn0dHIwI");
     
     var TestObject = Parse.Object.extend("TestObject");
@@ -51,6 +84,7 @@
         $(".error").show();
       }
     });
+    */
   </script>
 </body>
 
