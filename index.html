@@ -18,6 +18,7 @@
         loadIdeas();
         loadFollwedIdeas();
         loadUserIdeas();
+        loadBids();
       });
 
       function loadIdeas(){
@@ -48,6 +49,39 @@
           },
           error: function(error){
             console.log("Error loading ideas: " + error.code + " " + error.message);
+          }
+        });
+      }
+
+      function loadBids(){
+        var Bid = Parse.Object.extend("Bid");
+        var bidQuery = new Parse.Query(Bid);
+        bidQuery.equalTo("user", user);
+        bidQuery.include("idea");
+        bidQuery.include("idea.user");
+        bidQuery.find({
+          success: function(results){
+
+            // display list
+            $.each(results, function(key, value){
+              //console.log(value);
+              bidQuery.get(value.id, {
+                success: function(bid){
+                  console.log(bid.get("amount"));
+                  try{
+                    $("#userbidlist").append("<li onclick=\"loadIdea('" + bid.get("idea").get("id") + "')\">" + bid.get("idea").get("title") + " $" + bid.get("amount") + " <i>by</i> " + bid.get("idea").get("user").get("username"));
+                  } catch(ex) {
+                    console.log(ex);
+                  }
+                },
+                error: function(object, error){
+                  console.log(error);
+                }
+              });
+            });
+          },
+          error: function(error){
+            console.log("Error loading followed ideas: " + error.code + " " + error.message);
           }
         });
       }
@@ -316,6 +350,12 @@
     <div id="following">
       <h3>following</h3>
       <ul id="followingideaslist">
+      </ul>
+    </div>
+
+    <div id="bidlist">
+      <h3>bids</h3>
+      <ul id="userbidlist">
       </ul>
     </div>
 
