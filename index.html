@@ -32,7 +32,7 @@
                 success: function(idea){
                   //console.log(idea.get("Bid"));
                   try{
-                    $("#allideaslist").append("<li onclick=\"loadIdea('" + idea.id + "')\">" + idea.get("title") + " $" + idea.get("bid") + " <i>by</i> " + idea.get("user").get("username") + "<input id=\"bidonamount\"/><button onclick=\"bidOnIdea('" + idea.id + "')\">bid</button>&nbsp;<button onclick=\"followIdea('" + idea.id + "')\">follow</button></li>");
+                    $("#allideaslist").append("<li onclick=\"loadIdea('" + idea.id + "')\">" + idea.get("title") + " $" + idea.get("bid") + " <i>by</i> " + idea.get("user").get("username") + "<button onclick=\"followIdea('" + idea.id + "')\">follow</button></li>");
                   } catch(ex) {
                     console.log(ex);
                   }
