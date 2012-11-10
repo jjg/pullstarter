@@ -1,28 +1,4 @@
 #Pullstarter#
 An inverted take on Kickstarter
 
-##API##
-
-###State Transitions###
-* a template for creating a user
-* a login/authentication process
-* a collection of ideas
-* a single idea
-* a template for adding/editing ideas
-* a collection of bids
-* a single bid
-* a template for adding/editing a bid
-* error details
-
-###Objects###
-
-####The idea object####
-‘’’
-// sample idea object
-{
-	“idea”:
-	{
-		“href” : URI,
-		“title” : STRING,
-		“description” : STRING,
-		
+Currently a pure HTML5 application back-ended to Parse.
