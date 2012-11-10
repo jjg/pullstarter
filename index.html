@@ -3,7 +3,6 @@
     <meta charset="utf-8">
     <title>Pullstarter</title>
     <meta name="description" content="My Parse App">
-    <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/styles.css">
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.1.8.min.js"></script>
@@ -46,22 +45,17 @@
       }
 
       function loadIdea(ideaId){
-        console.log("loading idea: " + ideaId);
 
         var ideaQuery = new Parse.Query(Idea);
         ideaQuery.get(ideaId, {
           success: function(idea){
             $("#ideatitle").html(idea.get("title"));
-            $("#ideadescription").html(idea.get("description"));
-
-             //$("#allideaslist").append("<li onclick=\"loadIdea('" + idea.id + "')\">" + idea.get("title") + "</li>");
+            $("#ideadescription").html(idea.get("description"));             
           },
           error: function(object, error){
               console.log(error);
             }
         });
-        //$("#ideatitle").html("foo");
-        //$("#ideadescription").html("bar");
       }
 
       function newIdea(){
@@ -89,7 +83,7 @@
     </div>
 
     <div id="allideas">
-      all ideas:
+      <h3>all ideas:</h3>
       <ul id="allideaslist">
       </ul>
     </div>
