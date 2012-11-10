@@ -31,7 +31,7 @@
 
               ideaQuery.get(value.id, {
                 success: function(idea){
-                  $("#allideaslist").append("<li>" + idea.get("title") + "</li>");
+                  $("#allideaslist").append("<li onclick=\"loadIdea('" + idea.id + "')\">" + idea.get("title") + "</li>");
                 },
               error: function(object, error){
                   console.log(error);
@@ -45,32 +45,44 @@
         });
       }
 
+      function loadIdea(ideaId){
+        console.log("loading idea: " + ideaId);
+
+        var ideaQuery = new Parse.Query(Idea);
+        ideaQuery.get(ideaId, {
+          success: function(idea){
+            $("#ideatitle").html(idea.get("title"));
+            $("#ideadescription").html(idea.get("description"));
+
+             //$("#allideaslist").append("<li onclick=\"loadIdea('" + idea.id + "')\">" + idea.get("title") + "</li>");
+          },
+          error: function(object, error){
+              console.log(error);
+            }
+        });
+        //$("#ideatitle").html("foo");
+        //$("#ideadescription").html("bar");
+      }
+
       function newIdea(){
 
-        //alert("title: " + $("#ideaTitle").val() + " description:" + $("#ideaDescription").val());
-
-        //var Idea = Parse.Object.extend("Idea");
         var idea = new Idea();
           idea.save({title:$("#ideaTitle").val(), description:$("#ideaDescription").val()}, {
             
           success: function(object) {
-            alert("Idea Added! Title: " + $("#ideaTitle").val() + " Description: " + $("#ideaDescription").val());
-            //$(".success").show();
+            $("#allideaslist").append("<li onclick='loadIdea(" + idea.id + ")'>" + idea.get("title") + "</li>");
           },
           error: function(model, error) {
             alert("adding idea failed (darn!)");
-            //$(".error").show();
           }
-          
         });
-        
       }
     </script>
   </head>
 
   <body>
 
-    <div id="idea">
+    <div id="newidea">
       Title: <input id="ideaTitle" type="text"><br>
       Description:<br><textarea id="ideaDescription"></textarea><br>
       <button onclick="newIdea()">add</button>
@@ -80,6 +92,11 @@
       all ideas:
       <ul id="allideaslist">
       </ul>
+    </div>
+
+    <div id="idea">
+      <h3 id="ideatitle"></h3>
+      <p id="ideadescription"></p>
     </div>
 
   </body>
