@@ -12,6 +12,7 @@
       Parse.initialize("sGF4JuqzcDyl4TDKKt3U7d3OdPNZG0FZ3TqTuJTr", "OXrMKIkKStgssmijppy8fbfutIvEvUaUOn0dHIwI");
 
       var Idea = Parse.Object.extend("Idea");
+      var user = Parse.User.current();
 
       $(document).ready(function() {
         loadIdeas();
@@ -68,9 +69,6 @@
       }
 
       function bidOnIdea(ideaId){
-
-        var user = Parse.User.current();
-
         if(user == null){
           alert("need to log in first");
         } else {
@@ -100,9 +98,6 @@
       }
 
       function newIdea(){
-
-        var user = Parse.User.current();
-
         if(user == null){
           alert("need to log in first");
         } else {
