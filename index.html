@@ -29,7 +29,7 @@
 
               ideaQuery.get(value.id, {
                 success: function(idea){
-                  $("#allideaslist").append("<li onclick=\"loadIdea('" + idea.id + "')\">" + idea.get("title") + "</li>");
+                  $("#allideaslist").append("<li onclick='loadIdea(" + idea.id + ")'>" + idea.get("title") + " <i>by</i> " + idea.get("user") + "</li>");
                 },
               error: function(object, error){
                   console.log(error);
@@ -59,16 +59,26 @@
 
       function newIdea(){
 
-        var idea = new Idea();
-          idea.save({title:$("#ideaTitle").val(), description:$("#ideaDescription").val()}, {
-            
-          success: function(object) {
-            $("#allideaslist").append("<li onclick='loadIdea(" + idea.id + ")'>" + idea.get("title") + "</li>");
-          },
-          error: function(model, error) {
-            alert("adding idea failed (darn!)");
-          }
-        });
+        var user = Parse.User.current();
+
+        if(user == null){
+          alert("need to log in first");
+        } else {
+          var idea = new Idea();
+          idea.set("title", $("#ideaTitle").val());
+          idea.set("description", $("#ideaDescription").val());
+          idea.set("user", user);
+
+          idea.save(null,{
+            success: function(object) {
+              $("#allideaslist").append("<li onclick='loadIdea(" + idea.id + ")'>" + idea.get("title") + " <i>by</i> " + idea.get("user") + "</li>");
+            },
+            error: function(model, error) {
+              console.log(error);
+              alert("adding idea failed (darn!)");
+            }
+          });
+        }
       }
     </script>
   </head>
