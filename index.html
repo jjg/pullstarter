@@ -22,21 +22,20 @@
         // load & display existing ideas
         var ideaQuery = new Parse.Query(Idea);
         ideaQuery.include("user");
+        ideaQuery.include("bid");
         ideaQuery.find({
           success: function(results){
 
             // display list
             $.each(results, function(key, value){
-
               ideaQuery.get(value.id, {
                 success: function(idea){
-                  //console.log(idea.get("user"));
+                  //console.log(idea.get("Bid"));
                   try{
-                    $("#allideaslist").append("<li onclick=\"loadIdea('" + idea.id + "')\">" + idea.get("title") + " <i>by</i> " + idea.get("user").get("username") + "</li>");
+                    $("#allideaslist").append("<li onclick=\"loadIdea('" + idea.id + "')\">" + idea.get("title") + " $" + idea.get("bid") + " <i>by</i> " + idea.get("user").get("username") + "<button onclick=\"bidOnIdea('" + idea.id + "')\">bid</button>&nbsp;<button onclick=\"followIdea('" + idea.id + "')\">follow</button></li>");
                   } catch(ex) {
                     console.log(ex);
                   }
-                  
                 },
               error: function(object, error){
                   console.log(error);
@@ -64,6 +63,14 @@
         });
       }
 
+      function followIdea(ideaId){
+        alert("following " + ideaId);
+      }
+
+      function bidOnIdea(ideaId){
+        alert("bidding on " + ideaId);
+      }
+
       function newIdea(){
 
         var user = Parse.User.current();
@@ -75,7 +82,6 @@
           idea.set("title", $("#ideaTitle").val());
           idea.set("description", $("#ideaDescription").val());
           idea.set("user", user);
-
           idea.save(null,{
             success: function(object) {
               $("#allideaslist").append("<li onclick='loadIdea(" + idea.id + ")'>" + idea.get("title") + " <i>by</i> " + idea.get("user").get("username") + "</li>");
@@ -83,6 +89,22 @@
             error: function(model, error) {
               console.log(error);
               alert("adding idea failed (darn!)");
+            }
+          });
+
+          // create the initial bid
+          var Bid = Parse.Object.extend("Bid");
+          var bid = new Bid();
+          bid.set("idea", idea);
+          bid.set("user", user);
+          bid.set("amount", $("#bid").val());
+          bid.save(null,{
+            success: function(object){
+              // all good
+            },
+            error: function(model, error){
+              console.log(error);
+              alert("error creating initial bid!");
             }
           });
         }
@@ -127,18 +149,22 @@
         <li>username: <input id="username"/>
         <li>password: <input id="password"/>
         <li>email: <input id="email"/>
-        <li><button onclick="register()">register</button>&nbsp;<button onclick="login()">login</botton>
+        <li><button onclick="register()">register</button>&nbsp;<button onclick="login()">login</button>
       </ul>
     </div>
 
     <div id="newidea">
-      Title: <input id="ideaTitle" type="text"><br>
-      Description:<br><textarea id="ideaDescription"></textarea><br>
-      <button onclick="newIdea()">add</button>
+      <h3>new idea</h3>
+      <ul>
+        <li>title: <input id="ideaTitle"/>
+        <li>description:<br><textarea id="ideaDescription"></textarea>
+        <li>bid: <input id="bid"/>
+        <li><button onclick="newIdea()">add</button>
+      </ul>
     </div>
 
     <div id="allideas">
-      <h3>all ideas:</h3>
+      <h3>all ideas</h3>
       <ul id="allideaslist">
       </ul>
     </div>
