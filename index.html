@@ -21,6 +21,7 @@
 
         // load & display existing ideas
         var ideaQuery = new Parse.Query(Idea);
+        ideaQuery.include("user");
         ideaQuery.find({
           success: function(results){
 
@@ -29,7 +30,13 @@
 
               ideaQuery.get(value.id, {
                 success: function(idea){
-                  $("#allideaslist").append("<li onclick='loadIdea(" + idea.id + ")'>" + idea.get("title") + " <i>by</i> " + idea.get("user") + "</li>");
+                  //console.log(idea.get("user"));
+                  try{
+                    $("#allideaslist").append("<li onclick='loadIdea(" + idea.id + ")'>" + idea.get("title") + " <i>by</i> " + idea.get("user").get("username") + "</li>");
+                  } catch(ex) {
+                    console.log(ex);
+                  }
+                  
                 },
               error: function(object, error){
                   console.log(error);
@@ -71,7 +78,7 @@
 
           idea.save(null,{
             success: function(object) {
-              $("#allideaslist").append("<li onclick='loadIdea(" + idea.id + ")'>" + idea.get("title") + " <i>by</i> " + idea.get("user") + "</li>");
+              $("#allideaslist").append("<li onclick='loadIdea(" + idea.id + ")'>" + idea.get("title") + " <i>by</i> " + idea.get("user").get("username") + "</li>");
             },
             error: function(model, error) {
               console.log(error);
@@ -80,10 +87,49 @@
           });
         }
       }
+
+      function register(){
+        var user = new Parse.User();
+        user.set("username", $("#username").val());
+        user.set("password", $("#password").val());
+        user.set("email", $("#email").val());
+
+        user.signUp(null, {
+          success: function(user){
+            alert("signup sucessful!");
+          },
+          error: function(user, error){
+            console.log(error);
+            alert("signup failed!");
+          }
+        });
+      }
+
+      function login(){
+        Parse.User.logIn($("#username").val(), $("#password").val(), {
+          success: function(user){
+            alert("logged-in sucessfully");
+          },
+          error: function(user, error){
+            console.log(error);
+            alert("login failed");
+          }
+        });
+      }
     </script>
   </head>
 
   <body>
+
+    <div id="login">
+      <h3>login</h3>
+      <ul>
+        <li>username: <input id="username"/>
+        <li>password: <input id="password"/>
+        <li>email: <input id="email"/>
+        <li><button onclick="register()">register</button>&nbsp;<button onclick="login()">login</botton>
+      </ul>
+    </div>
 
     <div id="newidea">
       Title: <input id="ideaTitle" type="text"><br>
