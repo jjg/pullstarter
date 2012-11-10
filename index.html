@@ -122,7 +122,7 @@
           success: function(idea){
             $("#ideatitle").html(idea.get("title"));
             $("#ideadescription").html(idea.get("description"));  
-            $("#ideadetail").append("<button onclick=\"bidOnIdea('" + idea.id + "')\">bid</button>");      
+            $("#detailbidbutton").replaceWith("<button id=\"detailbidbutton\" onclick=\"bidOnIdea('" + idea.id + "')\">bid</button>");      
           },
           error: function(object, error){
               console.log(error);
@@ -329,7 +329,7 @@
       <h3>idea details</h3>
       <span id="ideatitle" style="font-weight:bold"></span>
       <p id="ideadescription"></p>
-      <input id="bidamount"/>&nbsp;
+      <input id="bidamount"/>&nbsp;<button id="detailbidbutton">bid</button>
     </div>
 
   </body>
