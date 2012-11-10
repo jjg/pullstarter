@@ -32,7 +32,7 @@
                 success: function(idea){
                   //console.log(idea.get("Bid"));
                   try{
-                    $("#allideaslist").append("<li onclick=\"loadIdea('" + idea.id + "')\">" + idea.get("title") + " $" + idea.get("bid") + " <i>by</i> " + idea.get("user").get("username") + "<button onclick=\"bidOnIdea('" + idea.id + "')\">bid</button>&nbsp;<button onclick=\"followIdea('" + idea.id + "')\">follow</button></li>");
+                    $("#allideaslist").append("<li onclick=\"loadIdea('" + idea.id + "')\">" + idea.get("title") + " $" + idea.get("bid") + " <i>by</i> " + idea.get("user").get("username") + "<input id=\"bidonamount\"/><button onclick=\"bidOnIdea('" + idea.id + "')\">bid</button>&nbsp;<button onclick=\"followIdea('" + idea.id + "')\">follow</button></li>");
                   } catch(ex) {
                     console.log(ex);
                   }
@@ -68,7 +68,35 @@
       }
 
       function bidOnIdea(ideaId){
-        alert("bidding on " + ideaId);
+
+        var user = Parse.User.current();
+
+        if(user == null){
+          alert("need to log in first");
+        } else {
+          var ideaQuery = new Parse.Query(Idea);
+          ideaQuery.get(ideaId, {
+            success: function(idea){
+              var Bid = Parse.Object.extend("Bid");
+              var bid = new Bid();
+              bid.set("idea", idea);
+              bid.set("user", user);
+              bid.set("amount", $("#bidonamount").val());
+              bid.save(null,{
+                success: function(object){
+                  // all good
+                },
+                error: function(model, error){
+                  console.log(error);
+                  alert("error creating initial bid!");
+                }
+              });             
+            },
+            error: function(object, error){
+                console.log(error);
+              }
+          });
+        }
       }
 
       function newIdea(){
