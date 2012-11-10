@@ -1,131 +1,86 @@
 <!doctype html>
-<head>
-  <meta charset="utf-8">
+  <head>
+    <meta charset="utf-8">
+    <title>Pullstarter</title>
+    <meta name="description" content="My Parse App">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.1.8.min.js"></script>
+    <script type="text/javascript" src="pullstarter.js"></script>
+    <script>
 
-  <title>Pullstarter</title>
-  <meta name="description" content="My Parse App">
-  <meta name="viewport" content="width=device-width">
-  <link rel="stylesheet" href="css/reset.css">
-  <link rel="stylesheet" href="css/styles.css">
-  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-  <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.1.8.min.js"></script>
-  <script type="text/javascript" src="pullstarter.js"></script>
-  <script>
+      // init Parse
+      Parse.initialize("sGF4JuqzcDyl4TDKKt3U7d3OdPNZG0FZ3TqTuJTr", "OXrMKIkKStgssmijppy8fbfutIvEvUaUOn0dHIwI");
 
-    // init Parse
-    Parse.initialize("sGF4JuqzcDyl4TDKKt3U7d3OdPNZG0FZ3TqTuJTr", "OXrMKIkKStgssmijppy8fbfutIvEvUaUOn0dHIwI");
+      var Idea = Parse.Object.extend("Idea");
 
-    var Idea = Parse.Object.extend("Idea");
+      $(document).ready(function() {
+        loadIdeas();
+      });
 
-    $(document).ready(function() {
-      loadIdeas();
-    });
+      function loadIdeas(){
 
-    function loadIdeas(){
+        // load & display existing ideas
+        var ideaQuery = new Parse.Query(Idea);
+        ideaQuery.find({
+          success: function(results){
 
-      // load & display existing ideas
-      var ideaQuery = new Parse.Query(Idea);
-      ideaQuery.find({
-        success: function(results){
+            // display list
+            $.each(results, function(key, value){
 
-          // display list
-          $.each(results, function(key, value){
-
-            ideaQuery.get(value.id, {
-              success: function(idea){
-                $("#allideaslist").append("<li>" + idea.get("title") + "</li>");
-              },
-            error: function(object, error){
-                console.log(error);
-              }
+              ideaQuery.get(value.id, {
+                success: function(idea){
+                  $("#allideaslist").append("<li>" + idea.get("title") + "</li>");
+                },
+              error: function(object, error){
+                  console.log(error);
+                }
+              });
             });
-          });
-        },
-        error: function(error){
-          console.log("Error loading ideas: " + error.code + " " + error.message);
-        }
-      });
-    }
-
-    function newIdea(){
-
-      //alert("title: " + $("#ideaTitle").val() + " description:" + $("#ideaDescription").val());
-
-      //var Idea = Parse.Object.extend("Idea");
-      var idea = new Idea();
-        idea.save({title:$("#ideaTitle").val(), description:$("#ideaDescription").val()}, {
-          
-        success: function(object) {
-          alert("Idea Added! Title: " + $("#ideaTitle").val() + " Description: " + $("#ideaDescription").val());
-          //$(".success").show();
-        },
-        error: function(model, error) {
-          alert("adding idea failed (darn!)");
-          //$(".error").show();
-        }
-        
-      });
-      
-    }
-  </script>
-</head>
-
-<body>
-
-  <div id="idea">
-    Title: <input id="ideaTitle" type="text"><br>
-    Description:<br><textarea id="ideaDescription"></textarea><br>
-    <button onclick="newIdea()">add</button>
-  </div>
-
-  <div id="allideas">
-    all ideas:
-    <ul id="allideaslist">
-    </ul>
-  </div>
-
-  
-  <div id="main">
-    <h1>You're ready to use Parse!</h1>
-
-    <p>Read the documentation and start building your JavaScript app:</p>
-
-    <ul>
-      <li><a href="https://www.parse.com/docs/js_guide">Parse JavaScript Guide</a></li>
-      <li><a href="https://www.parse.com/docs/js">Parse JavaScript API Documentation</a></li>
-    </ul>
-
-    <div style="display:none" class="error">
-      Looks like there was a problem saving the test object. Make sure you've set your application ID and javascript key correctly in the call to <code>Parse.initialize</code> in this file.
-    </div>
-
-    <div style="display:none" class="success">
-      <p>We've also just created your first object using the following code:</p>
-      
-        <code>
-          var TestObject = Parse.Object.extend("TestObject");<br/>
-          var testObject = new TestObject();<br/>
-          testObject.save({foo: "bar"});
-        </code>
-    </div>
-  </div>
-
-  <script type="text/javascript">
-    /*
-    Parse.initialize("sGF4JuqzcDyl4TDKKt3U7d3OdPNZG0FZ3TqTuJTr", "OXrMKIkKStgssmijppy8fbfutIvEvUaUOn0dHIwI");
-    
-    var TestObject = Parse.Object.extend("TestObject");
-    var testObject = new TestObject();
-      testObject.save({foo: "bar"}, {
-      success: function(object) {
-        $(".success").show();
-      },
-      error: function(model, error) {
-        $(".error").show();
+          },
+          error: function(error){
+            console.log("Error loading ideas: " + error.code + " " + error.message);
+          }
+        });
       }
-    });
-    */
-  </script>
-</body>
 
+      function newIdea(){
+
+        //alert("title: " + $("#ideaTitle").val() + " description:" + $("#ideaDescription").val());
+
+        //var Idea = Parse.Object.extend("Idea");
+        var idea = new Idea();
+          idea.save({title:$("#ideaTitle").val(), description:$("#ideaDescription").val()}, {
+            
+          success: function(object) {
+            alert("Idea Added! Title: " + $("#ideaTitle").val() + " Description: " + $("#ideaDescription").val());
+            //$(".success").show();
+          },
+          error: function(model, error) {
+            alert("adding idea failed (darn!)");
+            //$(".error").show();
+          }
+          
+        });
+        
+      }
+    </script>
+  </head>
+
+  <body>
+
+    <div id="idea">
+      Title: <input id="ideaTitle" type="text"><br>
+      Description:<br><textarea id="ideaDescription"></textarea><br>
+      <button onclick="newIdea()">add</button>
+    </div>
+
+    <div id="allideas">
+      all ideas:
+      <ul id="allideaslist">
+      </ul>
+    </div>
+
+  </body>
 </html>
