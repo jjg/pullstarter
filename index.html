@@ -11,14 +11,47 @@
   <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.1.8.min.js"></script>
   <script type="text/javascript" src="pullstarter.js"></script>
   <script>
+
+    // init Parse
     Parse.initialize("sGF4JuqzcDyl4TDKKt3U7d3OdPNZG0FZ3TqTuJTr", "OXrMKIkKStgssmijppy8fbfutIvEvUaUOn0dHIwI");
+
+    var Idea = Parse.Object.extend("Idea");
+
+    $(document).ready(function() {
+      loadIdeas();
+    });
+
+    function loadIdeas(){
+
+      // load & display existing ideas
+      var ideaQuery = new Parse.Query(Idea);
+      ideaQuery.find({
+        success: function(results){
+
+          // display list
+          $.each(results, function(key, value){
+
+            ideaQuery.get(value.id, {
+              success: function(idea){
+                $("#allideaslist").append("<li>" + idea.get("title") + "</li>");
+              },
+            error: function(object, error){
+                console.log(error);
+              }
+            });
+          });
+        },
+        error: function(error){
+          console.log("Error loading ideas: " + error.code + " " + error.message);
+        }
+      });
+    }
 
     function newIdea(){
 
       //alert("title: " + $("#ideaTitle").val() + " description:" + $("#ideaDescription").val());
 
-      
-      var Idea = Parse.Object.extend("Idea");
+      //var Idea = Parse.Object.extend("Idea");
       var idea = new Idea();
         idea.save({title:$("#ideaTitle").val(), description:$("#ideaDescription").val()}, {
           
@@ -44,6 +77,13 @@
     Description:<br><textarea id="ideaDescription"></textarea><br>
     <button onclick="newIdea()">add</button>
   </div>
+
+  <div id="allideas">
+    all ideas:
+    <ul id="allideaslist">
+    </ul>
+  </div>
+
   
   <div id="main">
     <h1>You're ready to use Parse!</h1>
