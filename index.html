@@ -121,7 +121,8 @@
         ideaQuery.get(ideaId, {
           success: function(idea){
             $("#ideatitle").html(idea.get("title"));
-            $("#ideadescription").html(idea.get("description"));             
+            $("#ideadescription").html(idea.get("description"));  
+            $("#ideadetail").append("<button onclick=\"bidOnIdea('" + idea.id + "')\">bid</button>");      
           },
           error: function(object, error){
               console.log(error);
@@ -199,7 +200,7 @@
               var bid = new Bid();
               bid.set("idea", idea);
               bid.set("user", user);
-              bid.set("amount", $("#bidonamount").val());
+              bid.set("amount", $("#bidamount").val());
               bid.save(null,{
                 success: function(object){
                   // all good
@@ -240,7 +241,7 @@
           var bid = new Bid();
           bid.set("idea", idea);
           bid.set("user", user);
-          bid.set("amount", $("#bid").val());
+          bid.set("amount", $("#initialbid").val());
           bid.save(null,{
             success: function(object){
               // all good
@@ -301,7 +302,7 @@
       <ul>
         <li>title: <input id="ideaTitle"/>
         <li>description:<br><textarea id="ideaDescription"></textarea>
-        <li>bid: <input id="bid"/>
+        <li>bid: <input id="initialbid"/>
         <li><button onclick="newIdea()">add</button>
       </ul>
     </div>
@@ -324,10 +325,11 @@
       </ul>
     </div>
 
-    <div id="idea">
-      <h3 id="ideatitle"></h3>
+    <div id="ideadetail">
+      <h3>idea details</h3>
+      <span id="ideatitle" style="font-weight:bold"></span>
       <p id="ideadescription"></p>
-      <input id="bidamount"/>&nbsp;<button onclick="bidOnIdea()">bid</button>
+      <input id="bidamount"/>&nbsp;
     </div>
 
   </body>
