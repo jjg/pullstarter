@@ -65,7 +65,7 @@
                 success: function(idea){
                   //console.log(idea.get("Bid"));
                   try{
-                    $("#userideaslist").append("<li onclick=\"loadIdea('" + idea.id + "')\">" + idea.get("title") + " $" + idea.get("bid") + " <i>by</i> " + idea.get("user").get("username") + "<button onclick=\"unfollowIdea('" + idea.id + "')\">unfollow</button></li>");
+                    $("#userideaslist").append("<li onclick=\"loadIdea('" + idea.id + "')\">" + idea.get("title") + " $" + idea.get("bid") + "</li>");
                   } catch(ex) {
                     console.log(ex);
                   }
@@ -87,6 +87,7 @@
         var followQuery = new Parse.Query(IdeaFollow);
         followQuery.equalTo("user", user);
         followQuery.include("idea");
+        followQuery.include("idea.user");
         followQuery.find({
           success: function(results){
 
@@ -97,7 +98,7 @@
                 success: function(follow){
                   //console.log(follow.get("idea").get("title"));
                   try{
-                    $("#followingideaslist").append("<li onclick=\"loadIdea('" + follow.get("idea").id + "')\">" + follow.get("idea").get("title") + " $" + follow.get("idea").get("bid") + " <i>by</i> " + follow.get("idea").get("user").get("username") + "<button onclick=\"unfollowIdea('" + follow.get("idea").id + "')\">unfollow</button></li>");
+                    $("#followingideaslist").append("<li onclick=\"loadIdea('" + follow.get("idea").id + "')\">" + follow.get("idea").get("title") + " $" + follow.get("idea").get("bid") + " <i>by</i> " + follow.get("idea").get("user").get("username") + "<button onclick=\"unfollowIdea('" + follow.id + "')\">unfollow</button></li>");
                   } catch(ex) {
                     console.log(ex);
                   }
@@ -143,8 +144,9 @@
               //ideaFollow.set("amount", $("#bidonamount").val());
               ideaFollow.save(null,{
                 success: function(object){
-                  // all good
-                  $("#followingideaslist").append("<li onclick='loadIdea(" + idea.id + ")'>" + idea.get("title") + " <i>by</i> " + idea.get("user").get("username") + "</li>");
+
+                  // update follow list
+                  $("#followingideaslist").append("<li id=\"" + ideaFollow.id + "\" onclick='loadIdea(" + idea.id + ")'>" + idea.get("title") + " <i>by</i> " + idea.get("user").get("username") + "</li>");
                 },
                 error: function(model, error){
                   console.log(error);
@@ -157,6 +159,33 @@
               }
           });
         }
+      }
+
+      function unfollowIdea(followId){
+        var IdeaFollow = Parse.Object.extend("IdeaFollow");
+        var followQuery = new Parse.Query(IdeaFollow);
+        followQuery.get(followId, {
+          success: function(ideaFollow){
+            // delete
+            ideaFollow.destroy({
+              success: function(object){
+                // update list
+                //console.log($("#" + followId).html());
+
+                // todo: this isn't removing them from the list...
+                $("li").remove(":contains('" + followId +"')");
+              },
+              error: function(object, error){
+                // delete failed
+                console.log(error);
+              }
+            });
+          },
+          error: function(object, error){
+            // follow not found?
+            console.log(error);
+          }
+        });
       }
 
       function bidOnIdea(ideaId){
@@ -283,11 +312,6 @@
       </ul>
     </div>
 
-    <div id="idea">
-      <h3 id="ideatitle"></h3>
-      <p id="ideadescription"></p>
-    </div>
-
     <div id="following">
       <h3>following</h3>
       <ul id="followingideaslist">
@@ -298,6 +322,12 @@
       <h3>my ideas</h3>
       <ul id="userideaslist">
       </ul>
+    </div>
+
+    <div id="idea">
+      <h3 id="ideatitle"></h3>
+      <p id="ideadescription"></p>
+      <input id="bidamount"/>&nbsp;<button onclick="bidOnIdea()">bid</button>
     </div>
 
   </body>
