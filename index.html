@@ -16,6 +16,7 @@
 
       $(document).ready(function() {
         loadIdeas();
+        loadFollwedIdeas();
       });
 
       function loadIdeas(){
@@ -50,6 +51,68 @@
         });
       }
 
+      function loadUserIdeas(){
+        var ideaQuery = new Parse.Query(Idea);
+        ideaQuery.equalTo("user", user);
+        ideaQuery.include("user");
+        ideaQuery.find({
+          success: function(results){
+
+            // display list
+            $.each(results, function(key, value){
+              ideaQuery.get(value.id, {
+                success: function(idea){
+                  //console.log(idea.get("Bid"));
+                  try{
+                    $("#userideaslist").append("<li onclick=\"loadIdea('" + idea.id + "')\">" + idea.get("title") + " $" + idea.get("bid") + " <i>by</i> " + idea.get("user").get("username") + "<button onclick=\"unfollowIdea('" + idea.id + "')\">unfollow</button></li>");
+                  } catch(ex) {
+                    console.log(ex);
+                  }
+                },
+                error: function(object, error){
+                  console.log(error);
+                }
+              });
+            });
+          },
+          error: function(error){
+            console.log("Error loading followed ideas: " + error.code + " " + error.message);
+          }
+        });
+      }
+
+      function loadFollwedIdeas(){
+        var IdeaFollow = Parse.Object.extend("IdeaFollow");
+        var followQuery = new Parse.Query(IdeaFollow);
+        followQuery.equalTo("user", user);
+        followQuery.include("idea");
+        followQuery.find({
+          success: function(results){
+
+            // display list
+            $.each(results, function(key, value){
+              //console.log(value);
+              followQuery.get(value.id, {
+                success: function(follow){
+                  //console.log(follow.get("idea").get("title"));
+                  try{
+                    $("#followingideaslist").append("<li onclick=\"loadIdea('" + follow.get("idea").id + "')\">" + follow.get("idea").get("title") + " $" + follow.get("idea").get("bid") + " <i>by</i> " + follow.get("idea").get("user").get("username") + "<button onclick=\"unfollowIdea('" + follow.get("idea").id + "')\">unfollow</button></li>");
+                  } catch(ex) {
+                    console.log(ex);
+                  }
+                },
+                error: function(object, error){
+                  console.log(error);
+                }
+              });
+            });
+          },
+          error: function(error){
+            console.log("Error loading followed ideas: " + error.code + " " + error.message);
+          }
+        });
+      }
+
       function loadIdea(ideaId){
 
         var ideaQuery = new Parse.Query(Idea);
@@ -65,7 +128,34 @@
       }
 
       function followIdea(ideaId){
-        alert("following " + ideaId);
+        //alert("following " + ideaId);
+        if(user == null){
+          alert("need to log in first");
+        } else {
+          var ideaQuery = new Parse.Query(Idea);
+          ideaQuery.get(ideaId, {
+            success: function(idea){
+              var IdeaFollow = Parse.Object.extend("IdeaFollow");
+              var ideaFollow = new IdeaFollow();
+              ideaFollow.set("idea", idea);
+              ideaFollow.set("user", user);
+              //ideaFollow.set("amount", $("#bidonamount").val());
+              ideaFollow.save(null,{
+                success: function(object){
+                  // all good
+                  $("#followingideaslist").append("<li onclick='loadIdea(" + idea.id + ")'>" + idea.get("title") + " <i>by</i> " + idea.get("user").get("username") + "</li>");
+                },
+                error: function(model, error){
+                  console.log(error);
+                  alert("error following idea!");
+                }
+              });             
+            },
+            error: function(object, error){
+                console.log(error);
+              }
+          });
+        }
       }
 
       function bidOnIdea(ideaId){
@@ -195,6 +285,12 @@
     <div id="idea">
       <h3 id="ideatitle"></h3>
       <p id="ideadescription"></p>
+    </div>
+
+    <div id="following">
+      <h3>following</h3>
+      <ul id="followingideaslist">
+      </ul>
     </div>
 
   </body>
