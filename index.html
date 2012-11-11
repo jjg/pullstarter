@@ -26,7 +26,7 @@
         // load & display existing ideas
         var ideaQuery = new Parse.Query(Idea);
         ideaQuery.include("user");
-        ideaQuery.include("bid");
+        //ideaQuery.include("bid");
         ideaQuery.find({
           success: function(results){
 
@@ -34,9 +34,20 @@
             $.each(results, function(key, value){
               ideaQuery.get(value.id, {
                 success: function(idea){
-                  //console.log(idea.get("Bid"));
+
+                  bidTotal = 0;
+                  var Bid = Parse.Object.extend("Bid");
+                  var bidQuery = new Parse.Query(Bid);
+                  bidQuery.equalTo("idea", idea);
+                  bidQuery.find({
+                    success: function(bid) {
+                      //console.log(bid[0].get("amount"));
+                      bidTotal = bidTotal + bid[0].get("amount");
+                    }
+                  });
+
                   try{
-                    $("#allideaslist").append("<li onclick=\"loadIdea('" + idea.id + "')\">" + idea.get("title") + " $" + idea.get("bid") + " <i>by</i> " + idea.get("user").get("username") + "<button onclick=\"followIdea('" + idea.id + "')\">follow</button></li>");
+                    $("#allideaslist").append("<li onclick=\"loadIdea('" + idea.id + "')\">" + idea.get("title") + " $" + bidTotal + " <i>by</i> " + idea.get("user").get("username") + "<button onclick=\"followIdea('" + idea.id + "')\">follow</button></li>");
                   } catch(ex) {
                     console.log(ex);
                   }
