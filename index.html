@@ -4,7 +4,7 @@
     <title>Pullstarter</title>
     <meta name="description" content="My Parse App">
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/dot-luv/jquery-ui.css">
     <script src="http://code.jquery.com/jquery-1.8.2.js"></script>
     <script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
     
@@ -18,6 +18,9 @@
       var user = Parse.User.current();
 
       $(document).ready(function() {
+        $("#tabs").tabs();
+        $("#allideas").accordion();
+        $("#faq").accordion();
         $("#login").dialog({ autoOpen: false });
         $("#newidea").dialog({ autoOpen: false });
         $("#shownewidea").click(function() {
@@ -55,12 +58,13 @@
                   bidQuery.find({
                     success: function(bid) {
                       //console.log(bid[0].get("amount"));
-                      bidTotal = bidTotal + bid[0].get("amount");
+                      //bidTotal = bidTotal + bid[0].get("amount");
                     }
                   });
 
                   try{
-                    $("#allideaslist").append("<li onclick=\"loadIdea('" + idea.id + "')\">" + idea.get("title") + " $" + bidTotal + " <i>by</i> " + idea.get("user").get("username") + "<button onclick=\"followIdea('" + idea.id + "')\">follow</button></li>");
+                    $("#allideas").append("<h3 onclick=\"loadIdea('" + idea.id + "')\">" + idea.get("title") + "</h3>");
+                    $("#allideas").append("<div>" + " $" + bidTotal + " <i>by</i> " + idea.get("user").get("username") + "<button onclick=\"followIdea('" + idea.id + "')\">follow</button></div>");
                   } catch(ex) {
                     console.log(ex);
                   }
@@ -70,6 +74,7 @@
                 }
               });
             });
+            //$("#allideas").accordion("refresh");            
           },
           error: function(error){
             console.log("Error loading ideas: " + error.code + " " + error.message);
@@ -348,6 +353,67 @@
 
   <body>
 
+    <div id="tabs">
+      <ul>
+        <li><a href="#fragment-1"><span>All Ideas</span></a></li>
+          <li><a href="#fragment-2"><span>Dashboard</span></a></li>
+          <li><a href="#fragment-3"><span>F.A.Q.</span></a></li>
+          <li><a href="#fragment-4"><span>HOW-TO</span></a></li>
+      </ul>
+      <div id="fragment-1">
+
+        <div id="allideas">
+        </div>
+        <button id="shownewidea">new idea</button>
+
+      </div>
+
+      <div id="fragment-2">
+
+        <div id="following">
+          <h3>following</h3>
+          <ul id="followingideaslist">
+          </ul>
+        </div>
+
+        <div id="bidlist">
+          <h3>bids</h3>
+          <ul id="userbidlist">
+          </ul>
+        </div>
+
+        <div id="userideas">
+          <h3>my ideas</h3>
+          <ul id="userideaslist">
+          </ul>
+        </div>
+      </div>
+
+      <div id="fragment-3">
+        <h3>Frequently Asked Questions</h3>
+
+        <div id="faq">
+          <h3>Isn't this a rip-off of Kickstarter?</h3>
+          <div>
+            <p>No, you silly ape.
+          </div>
+          <h3>Isn't this a rip-off of Kickstarter?</h3>
+          <div>
+            <p>No, you silly ape.
+          </div>
+          <h3>Isn't this a rip-off of Kickstarter?</h3>
+          <div>
+            <p>No, you silly ape.
+          </div>
+        </div>
+      </div>
+
+      <div id="fragment-4">
+        <h3>HOW-TO Pullstarter</h3>
+      </div>
+
+    </div>
+
     <div id="login" title="Login">
       <ul>
         <li>username: <input id="username"/>
@@ -363,31 +429,6 @@
         <li>description:<br><textarea id="ideaDescription"></textarea>
         <li>bid: <input id="initialbid"/>
         <li><button onclick="newIdea()">add</button>
-      </ul>
-    </div>
-
-    <div id="allideas">
-      <h3>all ideas</h3>
-      <ul id="allideaslist">
-      </ul>
-      <button id="shownewidea">new idea</button>
-    </div>
-
-    <div id="following">
-      <h3>following</h3>
-      <ul id="followingideaslist">
-      </ul>
-    </div>
-
-    <div id="bidlist">
-      <h3>bids</h3>
-      <ul id="userbidlist">
-      </ul>
-    </div>
-
-    <div id="userideas">
-      <h3>my ideas</h3>
-      <ul id="userideaslist">
       </ul>
     </div>
 
