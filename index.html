@@ -4,7 +4,10 @@
     <title>Pullstarter</title>
     <meta name="description" content="My Parse App">
     <link rel="stylesheet" href="css/styles.css">
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css">
+    <script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+    <script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+    
     <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.1.8.min.js"></script>
     <script>
 
@@ -15,6 +18,16 @@
       var user = Parse.User.current();
 
       $(document).ready(function() {
+        $("#login").dialog({ autoOpen: false });
+        $("#newidea").dialog({ autoOpen: false });
+        $("#shownewidea").click(function() {
+          $("#newidea").dialog( "open" );
+        });
+        $("#ideadetail").dialog({ autoOpen: false });
+        $("#opener").click(function() {
+          $("#ideadetails").dialog( "open" );
+        });
+
         loadIdeas();
         loadFollwedIdeas();
         loadUserIdeas();
@@ -167,7 +180,9 @@
           success: function(idea){
             $("#ideatitle").html(idea.get("title"));
             $("#ideadescription").html(idea.get("description"));  
-            $("#detailbidbutton").replaceWith("<button id=\"detailbidbutton\" onclick=\"bidOnIdea('" + idea.id + "')\">bid</button>");      
+            $("#detailfollowbutton").replaceWith("<button id=\"detailfollowbutton\" onclick=\"followIdea('" + idea.id + "')\">follow</button>");
+            $("#detailbidbutton").replaceWith("<button id=\"detailbidbutton\" onclick=\"bidOnIdea('" + idea.id + "')\">bid</button>"); 
+            $("#ideadetail").dialog("open");     
           },
           error: function(object, error){
               console.log(error);
@@ -274,6 +289,7 @@
           idea.save(null,{
             success: function(object) {
               $("#allideaslist").append("<li onclick='loadIdea(" + idea.id + ")'>" + idea.get("title") + " <i>by</i> " + idea.get("user").get("username") + "</li>");
+              $("#newidea").dialog("close");
             },
             error: function(model, error) {
               console.log(error);
@@ -332,8 +348,7 @@
 
   <body>
 
-    <div id="login">
-      <h3>login</h3>
+    <div id="login" title="Login">
       <ul>
         <li>username: <input id="username"/>
         <li>password: <input id="password"/>
@@ -342,8 +357,7 @@
       </ul>
     </div>
 
-    <div id="newidea">
-      <h3>new idea</h3>
+    <div id="newidea" title="New Idea">
       <ul>
         <li>title: <input id="ideaTitle"/>
         <li>description:<br><textarea id="ideaDescription"></textarea>
@@ -356,6 +370,7 @@
       <h3>all ideas</h3>
       <ul id="allideaslist">
       </ul>
+      <button id="shownewidea">new idea</button>
     </div>
 
     <div id="following">
@@ -376,11 +391,10 @@
       </ul>
     </div>
 
-    <div id="ideadetail">
-      <h3>idea details</h3>
+    <div id="ideadetail" title="Idea Details">
       <span id="ideatitle" style="font-weight:bold"></span>
       <p id="ideadescription"></p>
-      <input id="bidamount"/>&nbsp;<button id="detailbidbutton">bid</button>
+      <input id="bidamount"/>&nbsp;<button id="detailbidbutton">bid</button>&nbsp;<button id="detailfollowbutton">bid</button>
     </div>
 
   </body>
