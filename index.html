@@ -90,7 +90,7 @@
         $("#userbidlist").append("<li class=\"nav-header\">Bids</li>");
 
         if(user==null){
-          $("#userbidlist").append("<li>none</li>");
+          $("#userbidlist").append("<li><a data-toggle=\"modal\" href=\"#login\">login to bid on ideas!</a></li>");
         } else {
           var Bid = Parse.Object.extend("Bid");
           var bidQuery = new Parse.Query(Bid);
@@ -131,7 +131,7 @@
         $("#userideaslist").append("<li class=\"nav-header\">Ideas</li>");
         
         if(user==null){
-          $("#userideaslist").append("<li>none</li>");
+          $("#userideaslist").append("<li><a data-toggle=\"modal\" href=\"#login\">login to post your ideas!</a></li>");
         } else {
           var ideaQuery = new Parse.Query(Idea);
           ideaQuery.equalTo("user", user);
@@ -169,7 +169,7 @@
         $("#followingideaslist").append("<li class=\"nav-header\">Following</li>");
         
         if(user==null){
-          $("#followingideaslist").append("<li>none</li>");
+          $("#followingideaslist").append("<li><a data-toggle=\"modal\" href=\"#login\">login to follow ideas!</a></li>");
         }else{
           var IdeaFollow = Parse.Object.extend("IdeaFollow");
           var followQuery = new Parse.Query(IdeaFollow);
@@ -415,8 +415,6 @@
             loadFollwedIdeas();
             loadUserIdeas();
             loadBids();
-
-            //alert("logged-in sucessfully");
           },
           error: function(user, error){
             console.log(error);
