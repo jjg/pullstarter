@@ -363,7 +363,7 @@
           <a class="brand" href="#">Pullstarter</a>
           <div class="nav-collapse collapse">
             <p class="navbar-text pull-right">
-              Logged in as <a id="usernamedisplay" href="#" class="navbar-link"></a>
+              Logged in as <a id="usernamedisplay" data-toggle="modal" href="#login" class="navbar-link"></a>
             </p>
             <ul class="nav">
               <li class="active"><a href="#">Home</a></li>
@@ -406,13 +406,23 @@
     </div>
 
     
-    <div id="login">
-      <ul>
-        <li>username: <input id="username"/>
-        <li>password: <input id="password"/>
-        <li>email: <input id="email"/>
-        <li><button onclick="register()">register</button>&nbsp;<button onclick="login()">login</button>
-      </ul>
+    <div id="login" class="modal hide fade">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Login</h3>
+      </div>
+      <div class="modal-body">
+        <ul>
+          <li>username: <input id="username"/>
+          <li>password: <input id="password"/>
+          <li>email: <input id="email"/>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <a href="#" data-dismiss="modal" class="btn">Cancel</a>
+        <a href="#" onclick="register()" class="btn btn-info">Register</a>
+        <a href="#" onclick="login()" class="btn btn-primary">Login</a>
+      </div>
     </div>
 
     <div id="newideamodal" class="modal hide fade">
@@ -433,10 +443,21 @@
       </div>
     </div>
 
-    <div id="ideadetail">
-      <span id="ideatitle" style="font-weight:bold"></span>
-      <p id="ideadescription"></p>
-      <input id="bidamount"/>&nbsp;<button id="detailbidbutton">bid</button>&nbsp;<button id="detailfollowbutton">bid</button>
+    <div id="ideadetail" class="modal hide fade">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Idea Details</h3>
+      </div>
+      <div class="modal-body">
+        <span id="ideatitle" style="font-weight:bold"></span>
+        <p id="ideadescription"></p>
+        <input id="bidamount"/>&nbsp;<button id="detailbidbutton">bid</button>&nbsp;<button id="detailfollowbutton">bid</button>
+      </div>
+      <div class="modal-footer">
+        <a href="#" data-dismiss="modal" class="btn">Close</a>
+        <a href="#" id="detailfollowbutton" class="btn btn-info">Follow</a>
+        <a href="#" id="detailbidbutton" class="btn btn-primary">Bid</a>
+      </div>
     </div>
 
   </body>
