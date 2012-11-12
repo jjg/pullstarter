@@ -309,6 +309,8 @@
                 success: function(object){
                   // all good
                   $('#bidmodal').modal('hide');
+
+                  $("#userbidlist").append("<li><a href=\"#\" onclick=\"loadIdea('" + bid.get("idea").id + "')\">" + bid.get("idea").get("title") + " $" + bid.get("amount") + " <i>by</i> " + bid.get("idea").get("user").get("username") + "</a>");
                 },
                 error: function(model, error){
                   console.log(error);
