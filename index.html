@@ -90,7 +90,7 @@
         $("#userbidlist").append("<li class=\"nav-header\">Bids</li>");
 
         if(user==null){
-          $("#userbidlist").append("<li><a data-toggle=\"modal\" href=\"#login\">login to bid on ideas!</a></li>");
+          $("#userbidlist").append("<li><a data-toggle=\"modal\" href=\"#login\">login to bid!</a></li>");
         } else {
           var Bid = Parse.Object.extend("Bid");
           var bidQuery = new Parse.Query(Bid);
@@ -131,7 +131,7 @@
         $("#userideaslist").append("<li class=\"nav-header\">Ideas</li>");
         
         if(user==null){
-          $("#userideaslist").append("<li><a data-toggle=\"modal\" href=\"#login\">login to post your ideas!</a></li>");
+          $("#userideaslist").append("<li><a data-toggle=\"modal\" href=\"#login\">login to post!</a></li>");
         } else {
           var ideaQuery = new Parse.Query(Idea);
           ideaQuery.equalTo("user", user);
@@ -169,7 +169,7 @@
         $("#followingideaslist").append("<li class=\"nav-header\">Following</li>");
         
         if(user==null){
-          $("#followingideaslist").append("<li><a data-toggle=\"modal\" href=\"#login\">login to follow ideas!</a></li>");
+          $("#followingideaslist").append("<li><a data-toggle=\"modal\" href=\"#login\">login to follow!</a></li>");
         }else{
           var IdeaFollow = Parse.Object.extend("IdeaFollow");
           var followQuery = new Parse.Query(IdeaFollow);
@@ -498,7 +498,7 @@
 
     <div id="login" class="modal hide fade">
       <div class="modal-header">
-        <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h3>Login</h3>
       </div>
       <div class="modal-body">
@@ -517,7 +517,7 @@
         </ul>
       </div>
       <div class="modal-footer">
-        <!--<a href="#" data-dismiss="modal" class="btn">Cancel</a>-->
+        <a href="#" data-dismiss="modal" class="btn">Cancel</a>
         <a href="#" onclick="logout()" class="btn btn-danger">Log out</a>
         <a href="#" onclick="register()" class="btn btn-info">Register</a>
         <a href="#" onclick="login()" class="btn btn-primary">Login</a>
