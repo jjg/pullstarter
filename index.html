@@ -18,8 +18,8 @@
 
       $(document).ready(function() {
         $("#tabs").tabs();
-        $("#allideas").accordion();
-        $("#faq").accordion();
+        //$("#allideas").accordion({heightStyle:"content"});
+        $("#faq").accordion({heightStyle:"content"});
         $("#login").dialog({ autoOpen: false });
         $("#newidea").dialog({ autoOpen: false });
         $("#shownewidea").click(function() {
@@ -49,7 +49,6 @@
             $.each(results, function(key, value){
               ideaQuery.get(value.id, {
                 success: function(idea){
-
                   bidTotal = 0;
                   var Bid = Parse.Object.extend("Bid");
                   var bidQuery = new Parse.Query(Bid);
@@ -60,7 +59,6 @@
                       //bidTotal = bidTotal + bid[0].get("amount");
                     }
                   });
-
                   try{
                     $("#allideas").append("<h3 onclick=\"loadIdea('" + idea.id + "')\">" + idea.get("title") + "</h3>");
                     $("#allideas").append("<div>" + " $" + bidTotal + " <i>by</i> " + idea.get("user").get("username") + "<button onclick=\"followIdea('" + idea.id + "')\">follow</button></div>");
@@ -72,8 +70,7 @@
                   console.log(error);
                 }
               });
-            });
-            //$("#allideas").accordion("refresh");            
+            });           
           },
           error: function(error){
             console.log("Error loading ideas: " + error.code + " " + error.message);
@@ -352,9 +349,16 @@
 
   <body style="font-family: Arial,sans-serif; font-size: 10px;background-color:gray">
 
-    <h1>pullstarter</h1>
+    <div id="header">
+      <div>
+        <h1>pullstarter</h1>
+      </div>
+      <div>
+        <span>user: jjg</span>
+      </div>
+    </div>
 
-    <div id="tabs">
+    <div id="tabs" style="width:75%;margin:auto">
       <ul>
         <li><a href="#fragment-1"><span>All Ideas</span></a></li>
           <li><a href="#fragment-2"><span>Dashboard</span></a></li>
@@ -391,20 +395,20 @@
       </div>
 
       <div id="fragment-3">
-        <h3>Frequently Asked Questions</h3>
+        <h2>Frequently Asked Questions</h2>
 
         <div id="faq">
           <h3>Isn't this a rip-off of Kickstarter?</h3>
           <div>
-            <p>No, you silly ape.
+            <p>Mauris mauris ante, blandit et, ultrices a, suscipit eget. Integer ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut odio.</p>
           </div>
           <h3>Isn't this a rip-off of Kickstarter?</h3>
           <div>
-            <p>No, you silly ape.
+            <p>No, you silly ape.</p>
           </div>
           <h3>Isn't this a rip-off of Kickstarter?</h3>
           <div>
-            <p>No, you silly ape.
+            <p>No, you silly ape.</p>
           </div>
         </div>
       </div>
