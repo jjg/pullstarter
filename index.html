@@ -31,7 +31,13 @@
         $('#newidea').modal({
           show:false
         });
-        $("#usernamedisplay").html(user.get("username"));
+
+        if(user==null){
+          $("#usernamedisplay").html("nobody");
+        } else {
+          $("#usernamedisplay").html(user.get("username"));
+        }
+        
         loadIdeas();
         loadFollwedIdeas();
         loadUserIdeas();
@@ -80,99 +86,122 @@
       }
 
       function loadBids(){
-        var Bid = Parse.Object.extend("Bid");
-        var bidQuery = new Parse.Query(Bid);
-        bidQuery.equalTo("user", user);
-        bidQuery.include("idea");
-        bidQuery.include("idea.user");
-        bidQuery.find({
-          success: function(results){
+        $("#userbidlist").empty();
+        $("#userbidlist").append("<li class=\"nav-header\">Bids</li>");
 
-            // display list
-            $.each(results, function(key, value){
-              //console.log(value);
-              bidQuery.get(value.id, {
-                success: function(bid){
-                  //console.log(bid.get("idea").id);
-                  try{
-                    $("#userbidlist").append("<li><a href=\"#\" onclick=\"loadIdea('" + bid.get("idea").id + "')\">" + bid.get("idea").get("title") + " $" + bid.get("amount") + " <i>by</i> " + bid.get("idea").get("user").get("username") + "</a>");
-                  } catch(ex) {
-                    console.log(ex);
+        if(user==null){
+          $("#userbidlist").append("<li>none</li>");
+        } else {
+          var Bid = Parse.Object.extend("Bid");
+          var bidQuery = new Parse.Query(Bid);
+          bidQuery.equalTo("user", user);
+          bidQuery.include("idea");
+          bidQuery.include("idea.user");
+          bidQuery.find({
+            success: function(results){
+
+              // display list
+              $.each(results, function(key, value){
+                //console.log(value);
+                bidQuery.get(value.id, {
+                  success: function(bid){
+                    //console.log(bid.get("idea").id);
+                    try{
+                      $("#userbidlist").append("<li><a href=\"#\" onclick=\"loadIdea('" + bid.get("idea").id + "')\">" + bid.get("idea").get("title") + " $" + bid.get("amount") + " <i>by</i> " + bid.get("idea").get("user").get("username") + "</a>");
+                    } catch(ex) {
+                      console.log(ex);
+                    }
+                  },
+                  error: function(object, error){
+                    console.log(error);
                   }
-                },
-                error: function(object, error){
-                  console.log(error);
-                }
+                });
               });
-            });
-          },
-          error: function(error){
-            console.log("Error loading followed ideas: " + error.code + " " + error.message);
-          }
-        });
+            },
+            error: function(error){
+              console.log("Error loading followed ideas: " + error.code + " " + error.message);
+            }
+          });
+        }
       }
 
       function loadUserIdeas(){
-        var ideaQuery = new Parse.Query(Idea);
-        ideaQuery.equalTo("user", user);
-        ideaQuery.include("user");
-        ideaQuery.find({
-          success: function(results){
 
-            // display list
-            $.each(results, function(key, value){
-              ideaQuery.get(value.id, {
-                success: function(idea){
-                  //console.log(idea.get("Bid"));
-                  try{
-                    $("#userideaslist").append("<li><a href=\"#\" onclick=\"loadIdea('" + idea.id + "')\">" + idea.get("title") + "</a>");
-                  } catch(ex) {
-                    console.log(ex);
+        $("#userideaslist").empty();
+        $("#userideaslist").append("<li class=\"nav-header\">Ideas</li>");
+        
+        if(user==null){
+          $("#userideaslist").append("<li>none</li>");
+        } else {
+          var ideaQuery = new Parse.Query(Idea);
+          ideaQuery.equalTo("user", user);
+          ideaQuery.include("user");
+          ideaQuery.find({
+            success: function(results){
+
+              // display list
+              $.each(results, function(key, value){
+                ideaQuery.get(value.id, {
+                  success: function(idea){
+                    //console.log(idea.get("Bid"));
+                    try{
+                      $("#userideaslist").append("<li><a href=\"#\" onclick=\"loadIdea('" + idea.id + "')\">" + idea.get("title") + "</a>");
+                    } catch(ex) {
+                      console.log(ex);
+                    }
+                  },
+                  error: function(object, error){
+                    console.log(error);
                   }
-                },
-                error: function(object, error){
-                  console.log(error);
-                }
+                });
               });
-            });
-          },
-          error: function(error){
-            console.log("Error loading followed ideas: " + error.code + " " + error.message);
-          }
-        });
+            },
+            error: function(error){
+              console.log("Error loading followed ideas: " + error.code + " " + error.message);
+            }
+          });
+        }
       }
 
       function loadFollwedIdeas(){
-        var IdeaFollow = Parse.Object.extend("IdeaFollow");
-        var followQuery = new Parse.Query(IdeaFollow);
-        followQuery.equalTo("user", user);
-        followQuery.include("idea");
-        followQuery.include("idea.user");
-        followQuery.find({
-          success: function(results){
 
-            // display list
-            $.each(results, function(key, value){
-              //console.log(value);
-              followQuery.get(value.id, {
-                success: function(follow){
-                  //console.log(follow.get("idea").get("title"));
-                  try{
-                    $("#followingideaslist").append("<li><a href=\"#\" onclick=\"loadIdea('" + follow.get("idea").id + "')\">" + follow.get("idea").get("title") + " <i>by</i> " + follow.get("idea").get("user").get("username") + "</a>");
-                  } catch(ex) {
-                    console.log(ex);
+        $("#followingideaslist").empty();
+        $("#followingideaslist").append("<li class=\"nav-header\">Following</li>");
+        
+        if(user==null){
+          $("#followingideaslist").append("<li>none</li>");
+        }else{
+          var IdeaFollow = Parse.Object.extend("IdeaFollow");
+          var followQuery = new Parse.Query(IdeaFollow);
+          followQuery.equalTo("user", user);
+          followQuery.include("idea");
+          followQuery.include("idea.user");
+          followQuery.find({
+            success: function(results){
+
+              // display list
+              $.each(results, function(key, value){
+                //console.log(value);
+                followQuery.get(value.id, {
+                  success: function(follow){
+                    //console.log(follow.get("idea").get("title"));
+                    try{
+                      $("#followingideaslist").append("<li><a href=\"#\" onclick=\"loadIdea('" + follow.get("idea").id + "')\">" + follow.get("idea").get("title") + " <i>by</i> " + follow.get("idea").get("user").get("username") + "</a>");
+                    } catch(ex) {
+                      console.log(ex);
+                    }
+                  },
+                  error: function(object, error){
+                    console.log(error);
                   }
-                },
-                error: function(object, error){
-                  console.log(error);
-                }
+                });
               });
-            });
-          },
-          error: function(error){
-            console.log("Error loading followed ideas: " + error.code + " " + error.message);
-          }
-        });
+            },
+            error: function(error){
+              console.log("Error loading followed ideas: " + error.code + " " + error.message);
+            }
+          });
+        }
       }
 
       function loadIdea(ideaId){
@@ -279,10 +308,11 @@
               bid.save(null,{
                 success: function(object){
                   // all good
+                  $('#bidmodal').modal('hide');
                 },
                 error: function(model, error){
                   console.log(error);
-                  alert("error creating initial bid!");
+                  alert("error creating bid!");
                 }
               });             
             },
@@ -355,7 +385,16 @@
 
         user.signUp(null, {
           success: function(user){
-            alert("signup sucessful!");
+
+            // hide the dialog
+            $('#login').modal('hide');
+
+            loadFollwedIdeas();
+            loadUserIdeas();
+            loadBids();
+
+            //alert("signup sucessful!");
+
           },
           error: function(user, error){
             console.log(error);
@@ -367,7 +406,17 @@
       function login(){
         Parse.User.logIn($("#username").val(), $("#password").val(), {
           success: function(user){
-            alert("logged-in sucessfully");
+
+            // hide the dialog
+            $('#login').modal('hide');
+
+            $("#usernamedisplay").html(user.get("username"));
+
+            loadFollwedIdeas();
+            loadUserIdeas();
+            loadBids();
+
+            //alert("logged-in sucessfully");
           },
           error: function(user, error){
             console.log(error);
@@ -375,6 +424,20 @@
           }
         });
       }
+
+      function logout(){
+
+        // hide the dialog
+        $('#login').modal('hide');
+
+        $("#usernamedisplay").html("nobody");
+
+        Parse.User.logOut();
+        loadFollwedIdeas();
+        loadUserIdeas();
+        loadBids();
+      }
+
     </script>
   </head>
 
@@ -435,21 +498,29 @@
       </div>
     </div>
 
-    
     <div id="login" class="modal hide fade">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
         <h3>Login</h3>
       </div>
       <div class="modal-body">
-        <ul>
-          <li>username: <input id="username"/>
-          <li>password: <input id="password"/>
-          <li>email: <input id="email"/>
+        <form>
+          <fieldset>
+            <legend>You must sign in or register to continue</legend>
+            <label>Username</label>
+            <input type="text" placeholder="raymond" id="username">
+            <label>Password</label>
+            <input type="password" placeholder="secret" id="password">
+            <label>Email</label>
+            <input type="text" placeholder="jack@theroad.com" id="email">
+            <span class="help-block">only required for new registrations</span>
+          </fieldset>
+        </form>
         </ul>
       </div>
       <div class="modal-footer">
-        <a href="#" data-dismiss="modal" class="btn">Cancel</a>
+        <!--<a href="#" data-dismiss="modal" class="btn">Cancel</a>-->
+        <a href="#" onclick="logout()" class="btn btn-danger">Log out</a>
         <a href="#" onclick="register()" class="btn btn-info">Register</a>
         <a href="#" onclick="login()" class="btn btn-primary">Login</a>
       </div>
