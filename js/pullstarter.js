@@ -1,3 +1,0 @@
-function newIdea(){
-	alert("adding!");
-}
