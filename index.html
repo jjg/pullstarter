@@ -530,10 +530,16 @@
         <h3>New Idea</h3>
       </div>
       <div class="modal-body">
-        <ul>
-          <li>title: <input id="ideaTitle"/>
-          <li>description:<br><textarea id="ideaDescription"></textarea>
-          <li>bid: <input id="initialbid"/>
+        <form>
+          <fieldset>
+            <label>Title</label>
+            <input type="text" placeholder="my awesome idea" id="ideaTitle">
+            <span class="help-block">keep it short and descriptive, like a good sentence</span>
+            <label>Description</label>
+            <textarea id="ideaDescription" rows="5" placeholder="This is what it does and why I want it and all that other good stuff."></textarea>
+            <label>My Bid</label>
+            $<input type="text" id="initialbid" placeholder="1000000.00">
+            <span class="help-block">this is what you'd be willing to pay to own what you've just described</span>
         </ul>
       </div>
       <div class="modal-footer">
