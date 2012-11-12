@@ -206,6 +206,12 @@
               ideaFollow.set("idea", idea);
               ideaFollow.set("user", user);
               //ideaFollow.set("amount", $("#bidonamount").val());
+
+              // only let the author edit, everyone else can read
+              var followACL = new Parse.ACL(user);
+              followACL.setPublicReadAccess(true);
+              ideaFollow.setACL(followACL);
+
               ideaFollow.save(null,{
                 success: function(object){
 
@@ -264,6 +270,12 @@
               bid.set("idea", idea);
               bid.set("user", user);
               bid.set("amount", $("#bidamount").val());
+
+              // only let the author edit, everyone else can read
+              var bidACL = new Parse.ACL(user);
+              bidACL.setPublicReadAccess(true);
+              bid.setACL(bidACL);
+
               bid.save(null,{
                 success: function(object){
                   // all good
@@ -289,6 +301,12 @@
           idea.set("title", $("#ideaTitle").val());
           idea.set("description", $("#ideaDescription").val());
           idea.set("user", user);
+
+          // only let the author edit, everyone else can read
+          var ideaACL = new Parse.ACL(user);
+          ideaACL.setPublicReadAccess(true);
+          idea.setACL(ideaACL);
+
           idea.save(null,{
             success: function(object) {
               //$("#allideaslist").append("<li onclick='loadIdea(" + idea.id + ")'>" + idea.get("title") + " <i>by</i> " + idea.get("user").get("username") + "</li>");
@@ -311,6 +329,12 @@
           bid.set("idea", idea);
           bid.set("user", user);
           bid.set("amount", $("#initialbid").val());
+
+          // only let the author edit, everyone else can read
+          var bidACL = new Parse.ACL(user);
+          bidACL.setPublicReadAccess(true);
+          bid.setACL(bidACL);
+
           bid.save(null,{
             success: function(object){
               // all good
