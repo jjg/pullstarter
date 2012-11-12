@@ -62,9 +62,6 @@
                     }
                   });
                   try{
-                    //$("#allideas").append("<h3 onclick=\"loadIdea('" + idea.id + "')\">" + idea.get("title") + "</h3>");
-                    //$("#allideas").append("<div>" + " $" + bidTotal + " <i>by</i> " + idea.get("user").get("username") + "<button onclick=\"followIdea('" + idea.id + "')\">follow</button></div>");
-
                     $("#allideas").append("<tr><td>" + idea.get("title") + "</td><td>" + idea.get("user").get("username") + "</td><td>" + bidTotal + "</td><td><a href=\"#\" class=\"btn btn-info\" onclick=\"loadIdea('" + idea.id + "')\">Details</a></td><td><a href=\"#\" class=\"btn\" onclick=\"followIdea('" + idea.id + "')\">Follow</a></td></tr>");
                   } catch(ex) {
                     console.log(ex);
@@ -96,9 +93,9 @@
               //console.log(value);
               bidQuery.get(value.id, {
                 success: function(bid){
-                  console.log(bid.get("amount"));
+                  //console.log(bid.get("idea").id);
                   try{
-                    $("#userbidlist").append("<li onclick=\"loadIdea('" + bid.get("idea").get("id") + "')\">" + bid.get("idea").get("title") + " $" + bid.get("amount") + " <i>by</i> " + bid.get("idea").get("user").get("username"));
+                    $("#userbidlist").append("<li><a href=\"#\" onclick=\"loadIdea('" + bid.get("idea").id + "')\">" + bid.get("idea").get("title") + " $" + bid.get("amount") + " <i>by</i> " + bid.get("idea").get("user").get("username") + "</a>");
                   } catch(ex) {
                     console.log(ex);
                   }
@@ -128,7 +125,7 @@
                 success: function(idea){
                   //console.log(idea.get("Bid"));
                   try{
-                    $("#userideaslist").append("<li onclick=\"loadIdea('" + idea.id + "')\">" + idea.get("title") + " $" + idea.get("bid") + "</li>");
+                    $("#userideaslist").append("<li><a href=\"#\" onclick=\"loadIdea('" + idea.id + "')\">" + idea.get("title") + "</a>");
                   } catch(ex) {
                     console.log(ex);
                   }
@@ -161,7 +158,7 @@
                 success: function(follow){
                   //console.log(follow.get("idea").get("title"));
                   try{
-                    $("#followingideaslist").append("<li onclick=\"loadIdea('" + follow.get("idea").id + "')\">" + follow.get("idea").get("title") + " $" + follow.get("idea").get("bid") + " <i>by</i> " + follow.get("idea").get("user").get("username") + "<button onclick=\"unfollowIdea('" + follow.id + "')\">unfollow</button></li>");
+                    $("#followingideaslist").append("<li><a href=\"#\" onclick=\"loadIdea('" + follow.get("idea").id + "')\">" + follow.get("idea").get("title") + " <i>by</i> " + follow.get("idea").get("user").get("username") + "</a>");
                   } catch(ex) {
                     console.log(ex);
                   }
@@ -213,7 +210,7 @@
                 success: function(object){
 
                   // update follow list
-                  $("#followingideaslist").append("<li id=\"" + ideaFollow.id + "\" onclick='loadIdea(" + idea.id + ")'>" + idea.get("title") + " <i>by</i> " + idea.get("user").get("username") + "</li>");
+                  $("#followingideaslist").append("<li><a href=\"#\" onclick=\"loadIdea('" + idea.id + "')\">" + idea.get("title") + " <i>by</i> " + idea.get("user").get("username") + "</a>");
                 },
                 error: function(model, error){
                   console.log(error);
@@ -294,10 +291,13 @@
           idea.set("user", user);
           idea.save(null,{
             success: function(object) {
-              $("#allideaslist").append("<li onclick='loadIdea(" + idea.id + ")'>" + idea.get("title") + " <i>by</i> " + idea.get("user").get("username") + "</li>");
+              //$("#allideaslist").append("<li onclick='loadIdea(" + idea.id + ")'>" + idea.get("title") + " <i>by</i> " + idea.get("user").get("username") + "</li>");
+              $("#allideas").append("<tr><td>" + idea.get("title") + "</td><td>" + idea.get("user").get("username") + "</td><td>" + $("#initialbid").val() + "</td><td><a href=\"#\" class=\"btn btn-info\" onclick=\"loadIdea('" + idea.id + "')\">Details</a></td><td><a href=\"#\" class=\"btn\" onclick=\"followIdea('" + idea.id + "')\">Follow</a></td></tr>");
 
               // hide the dialog
-              $('#newideamodal').modal('hide')
+              $('#newideamodal').modal('hide');
+
+              // TODO: update "my ideas" list as well
             },
             error: function(model, error) {
               console.log(error);
