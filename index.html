@@ -28,6 +28,9 @@
       var user = Parse.User.current();
 
       $(document).ready(function() {
+        $('#newidea').modal({
+          show:false
+        });
         $("#usernamedisplay").html(user.get("username"));
         loadIdeas();
         loadFollwedIdeas();
@@ -288,6 +291,9 @@
           idea.save(null,{
             success: function(object) {
               $("#allideaslist").append("<li onclick='loadIdea(" + idea.id + ")'>" + idea.get("title") + " <i>by</i> " + idea.get("user").get("username") + "</li>");
+
+              // hide the dialog
+              $('#newideamodal').modal('hide')
             },
             error: function(model, error) {
               console.log(error);
@@ -361,7 +367,7 @@
             </p>
             <ul class="nav">
               <li class="active"><a href="#">Home</a></li>
-              <li><a href="#">New Idea</a></li>
+              <li><a data-toggle="modal" href="#newideamodal">New Idea</a></li>
               <li><a href="#about">About</a></li>
               <li><a href="#contact">Contact</a></li>
             </ul>
@@ -409,13 +415,22 @@
       </ul>
     </div>
 
-    <div id="newidea">
-      <ul>
-        <li>title: <input id="ideaTitle"/>
-        <li>description:<br><textarea id="ideaDescription"></textarea>
-        <li>bid: <input id="initialbid"/>
-        <li><button onclick="newIdea()">add</button>
-      </ul>
+    <div id="newideamodal" class="modal hide fade">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>New Idea</h3>
+      </div>
+      <div class="modal-body">
+        <ul>
+          <li>title: <input id="ideaTitle"/>
+          <li>description:<br><textarea id="ideaDescription"></textarea>
+          <li>bid: <input id="initialbid"/>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <a href="#" data-dismiss="modal" class="btn">Close</a>
+        <a href="#" onclick="newIdea()" class="btn btn-primary">Save changes</a>
+      </div>
     </div>
 
     <div id="ideadetail">
