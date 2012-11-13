@@ -33,9 +33,9 @@
         });
 
         if(user==null){
-          $("#usernamedisplay").html("nobody");
+          $("#usernamedisplay").html("Login");
         } else {
-          $("#usernamedisplay").html(user.get("username"));
+          $("#usernamedisplay").html("Logged in as " + user.get("username"));
         }
         
         loadIdeas();
@@ -446,13 +446,10 @@
 
       function login(){
         Parse.User.logIn($("#username").val(), $("#password").val(), {
-          success: function(user){
-
-            // hide the dialog
+          success: function(theUser){
+            user = theUser;
             $('#login').modal('hide');
-
-            $("#usernamedisplay").html(user.get("username"));
-
+            $("#usernamedisplay").html("Logged in as " + user.get("username"));
             loadFollwedIdeas();
             loadUserIdeas();
             loadBids();
@@ -465,12 +462,9 @@
       }
 
       function logout(){
-
-        // hide the dialog
         $('#login').modal('hide');
-
-        $("#usernamedisplay").html("nobody");
-
+        $("#usernamedisplay").html("Login");
+        user = null;
         Parse.User.logOut();
         loadFollwedIdeas();
         loadUserIdeas();
@@ -493,7 +487,7 @@
           <a class="brand" href="#">Pullstarter</a>
           <div class="nav-collapse collapse">
             <p class="navbar-text pull-right">
-              Logged in as <a id="usernamedisplay" data-toggle="modal" href="#login" class="navbar-link"></a>
+              <a id="usernamedisplay" data-toggle="modal" href="#login" class="navbar-link">Login</a>
             </p>
             <ul class="nav">
               <li class="active"><a href="#">Home</a></li>
