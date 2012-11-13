@@ -63,16 +63,12 @@
                   bidQuery.equalTo("idea", idea);
                   bidQuery.find({
                     success: function(bids) {
-                      //console.log(bids.length);
 
                       // calc the bid total
                       bidTotal = 0.00;
                       for(i=0;i<bids.length;i++){
-                        //console.log(bids[i].get("amount"));
                         bidTotal = bidTotal + parseFloat(bids[i].get("amount"));
                       }
-
-                      //bidTotal = bidTotal + bids.length;
                       
                       $("#allideas").append("<tr><td>" + idea.get("title") + "</td><td>" + idea.get("user").get("username") + "</td><td>$" + bidTotal + "</td><td><a href=\"#\" class=\"btn btn-info\" onclick=\"loadIdea('" + idea.id + "')\">Info</a></td><td><a href=\"#\" class=\"btn\" onclick=\"followIdea('" + idea.id + "')\">Follow</a></td></tr>");
                       }
@@ -186,10 +182,8 @@
 
               // display list
               $.each(results, function(key, value){
-                //console.log(value);
                 followQuery.get(value.id, {
                   success: function(follow){
-                    //console.log(follow.get("idea").get("title"));
                     try{
                       $("#followingideaslist").append("<li><a href=\"#\" onclick=\"loadIdea('" + follow.get("idea").id + "')\">" + follow.get("idea").get("title") + " <i>by</i> " + follow.get("idea").get("user").get("username") + "</a>");
                     } catch(ex) {
@@ -379,8 +373,10 @@
 
           idea.save(null,{
             success: function(object) {
-              //$("#allideaslist").append("<li onclick='loadIdea(" + idea.id + ")'>" + idea.get("title") + " <i>by</i> " + idea.get("user").get("username") + "</li>");
-              $("#allideas").append("<tr><td>" + idea.get("title") + "</td><td>" + idea.get("user").get("username") + "</td><td>" + $("#initialbid").val() + "</td><td><a href=\"#\" class=\"btn btn-info\" onclick=\"loadIdea('" + idea.id + "')\">Details</a></td><td><a href=\"#\" class=\"btn\" onclick=\"followIdea('" + idea.id + "')\">Follow</a></td></tr>");
+              $("#allideas").append("<tr><td>" + idea.get("title") + "</td><td>" + idea.get("user").get("username") + "</td><td>" + $("#initialbid").val() + "</td><td><a href=\"#\" class=\"btn btn-info\" onclick=\"loadIdea('" + idea.id + "')\">Info</a></td><td><a href=\"#\" class=\"btn\" onclick=\"followIdea('" + idea.id + "')\">Follow</a></td></tr>");
+
+              // add idea to my ideas list
+              $("#userideaslist").append("<li><a href=\"#\" onclick=\"loadIdea('" + idea.id + "')\">" + idea.get("title") + "</a>");
 
               // hide the dialog
               $('#newideamodal').modal('hide');
@@ -407,7 +403,8 @@
 
           bid.save(null,{
             success: function(object){
-              // all good
+              // add bid to list
+              $("#userbidlist").append("<li><a href=\"#\" onclick=\"loadIdea('" + bid.get("idea").id + "')\">" + bid.get("idea").get("title") + " $" + bid.get("amount") + " <i>by</i> " + bid.get("idea").get("user").get("username") + "</a>");
             },
             error: function(model, error){
               console.log(error);
