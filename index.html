@@ -34,8 +34,10 @@
 
         if(user==null){
           $("#usernamedisplay").html("Login");
+          $("#newideawell").hide();
         } else {
           $("#usernamedisplay").html("Logged in as " + user.get("username"));
+          $("#newideawell").show();
         }
         
         loadIdeas();
@@ -426,16 +428,13 @@
 
         user.signUp(null, {
           success: function(user){
-
-            // hide the dialog
+            user = theUser;
             $('#login').modal('hide');
-
+            $("#usernamedisplay").html("Logged in as " + user.get("username"));
+            $("#newideawell").show();
             loadFollwedIdeas();
             loadUserIdeas();
             loadBids();
-
-            //alert("signup sucessful!");
-
           },
           error: function(user, error){
             console.log(error);
@@ -450,6 +449,7 @@
             user = theUser;
             $('#login').modal('hide');
             $("#usernamedisplay").html("Logged in as " + user.get("username"));
+            $("#newideawell").show();
             loadFollwedIdeas();
             loadUserIdeas();
             loadBids();
@@ -463,6 +463,7 @@
 
       function logout(){
         $('#login').modal('hide');
+        $("#newideawell").hide();
         $("#usernamedisplay").html("Login");
         user = null;
         Parse.User.logOut();
@@ -509,7 +510,7 @@
         </div>        
         <div class="span4">
 
-          <div class="well" style="text-align:center">
+          <div id="newideawell" class="well" style="text-align:center">
             <a class="btn btn-large btn-primary" data-toggle="modal" href="#newideamodal">New Idea!</a>
           </div>
 
