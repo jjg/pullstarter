@@ -57,21 +57,26 @@
             $.each(results, function(key, value){
               ideaQuery.get(value.id, {
                 success: function(idea){
-                  bidTotal = 0;
+                  //bidTotal = 0;
                   var Bid = Parse.Object.extend("Bid");
                   var bidQuery = new Parse.Query(Bid);
                   bidQuery.equalTo("idea", idea);
                   bidQuery.find({
-                    success: function(bid) {
-                      //console.log(bid[0].get("amount"));
-                      //bidTotal = bidTotal + bid[0].get("amount");
-                    }
+                    success: function(bids) {
+                      //console.log(bids.length);
+
+                      // calc the bid total
+                      bidTotal = 0.00;
+                      for(i=0;i<bids.length;i++){
+                        //console.log(bids[i].get("amount"));
+                        bidTotal = bidTotal + parseFloat(bids[i].get("amount"));
+                      }
+
+                      //bidTotal = bidTotal + bids.length;
+                      
+                      $("#allideas").append("<tr><td>" + idea.get("title") + "</td><td>" + idea.get("user").get("username") + "</td><td>$" + bidTotal + "</td><td><a href=\"#\" class=\"btn btn-info\" onclick=\"loadIdea('" + idea.id + "')\">Info</a></td><td><a href=\"#\" class=\"btn\" onclick=\"followIdea('" + idea.id + "')\">Follow</a></td></tr>");
+                      }
                   });
-                  try{
-                    $("#allideas").append("<tr><td>" + idea.get("title") + "</td><td>" + idea.get("user").get("username") + "</td><td>" + bidTotal + "</td><td><a href=\"#\" class=\"btn btn-info\" onclick=\"loadIdea('" + idea.id + "')\">Info</a></td><td><a href=\"#\" class=\"btn\" onclick=\"followIdea('" + idea.id + "')\">Follow</a></td></tr>");
-                  } catch(ex) {
-                    console.log(ex);
-                  }
                 },
               error: function(object, error){
                   console.log(error);
