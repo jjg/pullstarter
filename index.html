@@ -216,8 +216,36 @@
           success: function(idea){
             $("#ideatitle").html(idea.get("title"));
             $("#ideadescription").html(idea.get("description"));  
-            $("#detailfollowbutton").replaceWith("<a href=\"#\" id=\"detailfollowbutton\" class=\"btn btn-primary\" onclick=\"followIdea('" + idea.id + "')\">Follow</a>");
-            $("#detailbidbutton").replaceWith("<button id=\"detailbidbutton\"  class=\"btn btn-success\" onclick=\"bidOnIdea('" + idea.id + "')\">Bid</button>");  
+
+            // figure out if we're already following this idea (may be inefficient)
+            var IdeaFollow = Parse.Object.extend("IdeaFollow");
+            var followQuery = new Parse.Query(IdeaFollow);
+            followQuery.equalTo("user", user);
+            followQuery.equalTo("idea", idea);
+            followQuery.find({
+              success: function(results){
+                //console.log(results.length);
+                if(results.length > 0){
+                  $("#detailfollowbutton").replaceWith("<a href=\"#\" id=\"detailfollowbutton\" class=\"btn btn-primary\" onclick=\"unfollowIdea('" + idea.id + "')\">Unfollow</a>");
+                } else {
+                  $("#detailfollowbutton").replaceWith("<a href=\"#\" id=\"detailfollowbutton\" class=\"btn btn-primary\" onclick=\"followIdea('" + idea.id + "')\">Follow</a>");
+                }
+              }
+            });
+
+            var Bid = Parse.Object.extend("Bid");
+            var bidQuery = new Parse.Query(Bid);
+            bidQuery.equalTo("user", user);
+            bidQuery.equalTo("idea", idea);
+            bidQuery.find({
+              success: function(results){
+                if(results.length > 0){
+                  $("#detailbidbutton").replaceWith("<button id=\"detailbidbutton\"  class=\"btn btn-success disabled\" onclick=\"bidOnIdea('" + idea.id + "')\">Bid</button>");  
+                } else {
+                  $("#detailbidbutton").replaceWith("<button id=\"detailbidbutton\"  class=\"btn btn-success\" onclick=\"bidOnIdea('" + idea.id + "')\">Bid</button>");  
+                }
+              }
+            });
 
             $('#ideadetailmodal').modal("show");
           },
