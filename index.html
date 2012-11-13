@@ -296,6 +296,7 @@
           alert("need to log in first");
         } else {
           var ideaQuery = new Parse.Query(Idea);
+          ideaQuery.include("user");
           ideaQuery.get(ideaId, {
             success: function(idea){
               var Bid = Parse.Object.extend("Bid");
