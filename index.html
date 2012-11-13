@@ -291,11 +291,16 @@
         }
       }
 
-      function unfollowIdea(followId){
+      function unfollowIdea(ideaId){
         var IdeaFollow = Parse.Object.extend("IdeaFollow");
         var followQuery = new Parse.Query(IdeaFollow);
-        followQuery.get(followId, {
+        var idea = new Idea();
+        idea.id = ideaId;
+        followQuery.equalTo("idea",idea);
+        followQuery.equalTo("user",user);
+        followQuery.first({
           success: function(ideaFollow){
+            console.log(ideaFollow);
             // delete
             ideaFollow.destroy({
               success: function(object){
@@ -303,7 +308,11 @@
                 //console.log($("#" + followId).html());
 
                 // todo: this isn't removing them from the list...
-                $("li").remove(":contains('" + followId +"')");
+                //$("li").remove(":contains('" + followId +"')");
+
+                loadFollwedIdeas();
+
+                $('#ideadetailmodal').modal("hide");
               },
               error: function(object, error){
                 // delete failed
