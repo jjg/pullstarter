@@ -228,6 +228,8 @@
           alert("need to log in first");
         } else {
           var ideaQuery = new Parse.Query(Idea);
+          //ideaQuery.include("idea");
+          ideaQuery.include("user");
           ideaQuery.get(ideaId, {
             success: function(idea){
               var IdeaFollow = Parse.Object.extend("IdeaFollow");
@@ -245,7 +247,7 @@
                 success: function(object){
 
                   $('#ideadetailmodal').modal('hide');
-                  
+
                   // update follow list
                   $("#followingideaslist").append("<li><a href=\"#\" onclick=\"loadIdea('" + idea.id + "')\">" + idea.get("title") + " <i>by</i> " + idea.get("user").get("username") + "</a>");
                 },
