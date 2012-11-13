@@ -50,6 +50,7 @@
 
         // load & display existing ideas
         var ideaQuery = new Parse.Query(Idea);
+        ideaQuery.descending("createdAt");
         ideaQuery.include("user");
         //ideaQuery.include("bid");
         ideaQuery.find({
@@ -420,7 +421,7 @@
           bid.save(null,{
             success: function(object){
               $("#initialbid").val("");
-              
+
               // add bid to list
               $("#userbidlist").append("<li><a href=\"#\" onclick=\"loadIdea('" + bid.get("idea").id + "')\">" + bid.get("idea").get("title") + " $" + bid.get("amount") + " <i>by</i> " + bid.get("idea").get("user").get("username") + "</a>");
             },
