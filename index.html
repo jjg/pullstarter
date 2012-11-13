@@ -213,35 +213,42 @@
             $("#ideatitle").html(idea.get("title"));
             $("#ideadescription").html(idea.get("description"));  
 
-            // figure out if we're already following this idea (may be inefficient)
-            var IdeaFollow = Parse.Object.extend("IdeaFollow");
-            var followQuery = new Parse.Query(IdeaFollow);
-            followQuery.equalTo("user", user);
-            followQuery.equalTo("idea", idea);
-            followQuery.find({
-              success: function(results){
-                //console.log(results.length);
-                if(results.length > 0){
-                  $("#detailfollowbutton").replaceWith("<a href=\"#\" id=\"detailfollowbutton\" class=\"btn btn-primary\" onclick=\"unfollowIdea('" + idea.id + "')\">Unfollow</a>");
-                } else {
-                  $("#detailfollowbutton").replaceWith("<a href=\"#\" id=\"detailfollowbutton\" class=\"btn btn-primary\" onclick=\"followIdea('" + idea.id + "')\">Follow</a>");
-                }
-              }
-            });
+            if(user==null){
+              $("#detailfollowbutton").replaceWith("<a href=\"#\" id=\"detailfollowbutton\" class=\"btn btn-primary disabled\" onclick=\"followIdea('" + idea.id + "')\">Follow</a>");
 
-            var Bid = Parse.Object.extend("Bid");
-            var bidQuery = new Parse.Query(Bid);
-            bidQuery.equalTo("user", user);
-            bidQuery.equalTo("idea", idea);
-            bidQuery.find({
-              success: function(results){
-                if(results.length > 0){
-                  $("#detailbidbutton").replaceWith("<button id=\"detailbidbutton\"  class=\"btn btn-success disabled\" onclick=\"bidOnIdea('" + idea.id + "')\">Bid</button>");  
-                } else {
-                  $("#detailbidbutton").replaceWith("<button id=\"detailbidbutton\"  class=\"btn btn-success\" onclick=\"bidOnIdea('" + idea.id + "')\">Bid</button>");  
+              $("#detailbidbutton").replaceWith("<button id=\"detailbidbutton\"  class=\"btn btn-success disabled\" onclick=\"bidOnIdea('" + idea.id + "')\">Bid</button>");
+            } else {
+              // figure out if we're already following this idea (may be inefficient)
+              var IdeaFollow = Parse.Object.extend("IdeaFollow");
+              var followQuery = new Parse.Query(IdeaFollow);
+              followQuery.equalTo("user", user);
+              followQuery.equalTo("idea", idea);
+              followQuery.find({
+                success: function(results){
+                  //console.log(results.length);
+                  if(results.length > 0){
+                    $("#detailfollowbutton").replaceWith("<a href=\"#\" id=\"detailfollowbutton\" class=\"btn btn-primary\" onclick=\"unfollowIdea('" + idea.id + "')\">Unfollow</a>");
+                  } else {
+                    $("#detailfollowbutton").replaceWith("<a href=\"#\" id=\"detailfollowbutton\" class=\"btn btn-primary\" onclick=\"followIdea('" + idea.id + "')\">Follow</a>");
+                  }
                 }
-              }
-            });
+              });
+
+              var Bid = Parse.Object.extend("Bid");
+              var bidQuery = new Parse.Query(Bid);
+              bidQuery.equalTo("user", user);
+              bidQuery.equalTo("idea", idea);
+              bidQuery.find({
+                success: function(results){
+                  if(results.length > 0){
+                    $("#detailbidbutton").replaceWith("<button id=\"detailbidbutton\"  class=\"btn btn-success disabled\" onclick=\"bidOnIdea('" + idea.id + "')\">Bid</button>");  
+                  } else {
+                    $("#detailbidbutton").replaceWith("<button id=\"detailbidbutton\"  class=\"btn btn-success\" onclick=\"bidOnIdea('" + idea.id + "')\">Bid</button>");  
+                  }
+                }
+              });              
+            }
+
 
             $('#ideadetailmodal').modal("show");
           },
