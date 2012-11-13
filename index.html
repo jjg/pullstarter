@@ -70,7 +70,7 @@
                         bidTotal = bidTotal + parseFloat(bids[i].get("amount"));
                       }
                       
-                      $("#allideas").append("<tr><td>" + idea.get("title") + "</td><td>" + idea.get("user").get("username") + "</td><td>$" + bidTotal + "</td><td><a href=\"#\" class=\"btn btn-info\" onclick=\"loadIdea('" + idea.id + "')\">Info</a></td><td><a href=\"#\" class=\"btn\" onclick=\"followIdea('" + idea.id + "')\">Follow</a></td></tr>");
+                      $("#allideas").append("<tr><td>" + idea.get("title") + "</td><td>" + idea.get("user").get("username") + "</td><td>$" + bidTotal + "</td><td><a href=\"#\" class=\"btn\" onclick=\"loadIdea('" + idea.id + "')\"><i class=\"icon-info-sign\"></i></a></td></tr>");
                       }
                   });
                 },
@@ -305,11 +305,6 @@
             ideaFollow.destroy({
               success: function(object){
                 // update list
-                //console.log($("#" + followId).html());
-
-                // todo: this isn't removing them from the list...
-                //$("li").remove(":contains('" + followId +"')");
-
                 loadFollwedIdeas();
 
                 $('#ideadetailmodal').modal("hide");
@@ -382,7 +377,7 @@
 
           idea.save(null,{
             success: function(object) {
-              $("#allideas").append("<tr><td>" + idea.get("title") + "</td><td>" + idea.get("user").get("username") + "</td><td>" + $("#initialbid").val() + "</td><td><a href=\"#\" class=\"btn btn-info\" onclick=\"loadIdea('" + idea.id + "')\">Info</a></td><td><a href=\"#\" class=\"btn\" onclick=\"followIdea('" + idea.id + "')\">Follow</a></td></tr>");
+              $("#allideas").append("<tr><td>" + idea.get("title") + "</td><td>" + idea.get("user").get("username") + "</td><td>" + $("#initialbid").val() + "</td><td><a href=\"#\" class=\"btn\" onclick=\"loadIdea('" + idea.id + "')\"><i class=\"icon-info-sign\"></i></a></td></tr>");
 
               // add idea to my ideas list
               $("#userideaslist").append("<li><a href=\"#\" onclick=\"loadIdea('" + idea.id + "')\">" + idea.get("title") + "</a>");
