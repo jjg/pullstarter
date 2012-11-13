@@ -354,6 +354,7 @@
                 success: function(object){
                   // all good
                   $('#ideadetailmodal').modal('hide');
+                  $("#bidamount").val("");
 
                   $("#userbidlist").append("<li><a href=\"#\" onclick=\"loadIdea('" + bid.get("idea").id + "')\">" + bid.get("idea").get("title") + " $" + bid.get("amount") + " <i>by</i> " + bid.get("idea").get("user").get("username") + "</a>");
                 },
@@ -393,6 +394,8 @@
 
               // hide the dialog
               $('#newideamodal').modal('hide');
+              $("#ideaTitle").val("");
+              $("#ideaDescription").val("");
 
               // TODO: update "my ideas" list as well
             },
@@ -416,6 +419,8 @@
 
           bid.save(null,{
             success: function(object){
+              $("#initialbid").val("");
+              
               // add bid to list
               $("#userbidlist").append("<li><a href=\"#\" onclick=\"loadIdea('" + bid.get("idea").id + "')\">" + bid.get("idea").get("title") + " $" + bid.get("amount") + " <i>by</i> " + bid.get("idea").get("user").get("username") + "</a>");
             },
